@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.apptodate.gain.MainActivity">
+
+    <group android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/Home"
+            android:title="Home"/>
+        <item
+            android:id="@+id/line"
+            android:title="____________________________________________________________________________________________________________"/>
+    </group>
+
+    <group android:id="@+id/group2"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/Profile"
+            android:title="Your Profile"/>
+        <item
+            android:id="@+id/RecentJob"
+            android:title="Recent Job"
+            />
+        <item
+            android:id="@+id/about"
+            android:title="About"
+            />
+    </group>
+
+</menu>
