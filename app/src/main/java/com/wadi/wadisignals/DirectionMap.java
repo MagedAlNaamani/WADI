@@ -75,7 +75,7 @@ public class DirectionMap extends FragmentActivity
             map.setTrafficEnabled(true);
 
             map.getUiSettings().setMyLocationButtonEnabled(false);
-            map.getUiSettings().setZoomGesturesEnabled(false);
+           // map.getUiSettings().setZoomGesturesEnabled(false);
 
             // Setting onclick event listener for the map
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener()
@@ -288,7 +288,7 @@ public class DirectionMap extends FragmentActivity
 
                         // Adding all the points in the route to LineOptions
                         lineOptions.addAll(points);
-                        lineOptions.width(2);
+                        lineOptions.width(3);
                         lineOptions.color(Color.RED);
                     }
 
