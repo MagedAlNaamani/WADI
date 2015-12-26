@@ -12,11 +12,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONObject;
 
@@ -75,7 +78,7 @@ public class DirectionMap extends FragmentActivity
             map.setTrafficEnabled(true);
 
             map.getUiSettings().setMyLocationButtonEnabled(false);
-            map.getUiSettings().setZoomGesturesEnabled(false);
+           // map.getUiSettings().setZoomGesturesEnabled(false);
 
             // Setting onclick event listener for the map
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener()
@@ -272,14 +275,45 @@ public class DirectionMap extends FragmentActivity
                         for (int j = 0; j < path.size(); j++) {
                             HashMap<String, String> point = path.get(j);
 
-                            double lat = Double.parseDouble(point.get("lat"));
-                            double lng = Double.parseDouble(point.get("lng"));
+                            final double lat = Double.parseDouble(point.get("lat"));
+                            final double lng = Double.parseDouble(point.get("lng"));
 
-                            map.addMarker(new MarkerOptions()
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                    .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                                    .title("This Wadi is Active")
-                                    .position(new LatLng(22.9378, 57.30763)));
+                            /*
+                            1. query to class has location
+                            2.fetch the location and add it to ParseGeoPoint
+                            3. check if parseGeoPoint is not null
+                            4.Compare the ParseGeoPoaint with lat and lng variable declared before
+                             */
+                            final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Wadi");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> List, ParseException e) {
+                                    if (e == null)
+                                    {
+                                        Log.d("score", "Retrieved " + List.size() + " objects");
+                                        for (ParseObject object : List)
+                                        {
+                                            ParseGeoPoint parseGeoPoint = object.getParseGeoPoint("Location");
+                                            if (parseGeoPoint != null)
+                                            {
+                                                Log.d("object", "parseGeoPoint not null");
+                                                if (parseGeoPoint.getLatitude() == lat || parseGeoPoint.getLongitude() == lng)
+                                                {
+                                                    Log.d("latLng", "draw the marker");
+                                                    map.addMarker(new MarkerOptions()
+                                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                                            .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                                                            .title("This Wadi is Active")
+                                                            .position(new LatLng(parseGeoPoint.getLatitude(), parseGeoPoint.getLongitude())));
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        Log.d("score", "Error: " + e.getMessage());
+                                    }
+                                }
+                            });
+
+
 
                             LatLng position = new LatLng(lat, lng);
 
@@ -288,7 +322,7 @@ public class DirectionMap extends FragmentActivity
 
                         // Adding all the points in the route to LineOptions
                         lineOptions.addAll(points);
-                        lineOptions.width(2);
+                        lineOptions.width(3);
                         lineOptions.color(Color.RED);
                     }
 
@@ -298,13 +332,13 @@ public class DirectionMap extends FragmentActivity
 
 
                     // Instantiates a new CircleOptions object and defines the center and radius
-                    CircleOptions circleOptions = new CircleOptions()
-                            .center(new LatLng(22.9378, 57.30763))
-                            .radius(1000)
-                            .zIndex(12);// In meters
+//                    CircleOptions circleOptions = new CircleOptions()
+//                            .center(new LatLng(22.9378, 57.30763))
+//                            .radius(1000)
+//                            .zIndex(12);// In meters
 
                     // Get back the mutable Circle
-                    Circle circle = map.addCircle(circleOptions);
+//                    Circle circle = map.addCircle(circleOptions);
 
                 }
 

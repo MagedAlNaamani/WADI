@@ -38,6 +38,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
+        <!-- SplashScreen -->
         <activity
             android:name=".SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -46,8 +47,15 @@
             android:theme="@style/AppTheme" >
 
         </activity>
+        <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <!-- DirectionMap -->
+        <activity
+            android:name=".DirectionMap"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" >
             <intent-filter>
@@ -55,12 +63,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".DirectionMap"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" >
-
         </activity>
 
 
