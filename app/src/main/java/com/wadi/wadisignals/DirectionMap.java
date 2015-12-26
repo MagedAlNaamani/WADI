@@ -12,8 +12,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -334,13 +332,13 @@ public class DirectionMap extends FragmentActivity
 
 
                     // Instantiates a new CircleOptions object and defines the center and radius
-                    CircleOptions circleOptions = new CircleOptions()
-                            .center(new LatLng(22.9378, 57.30763))
-                            .radius(1000)
-                            .zIndex(12);// In meters
+//                    CircleOptions circleOptions = new CircleOptions()
+//                            .center(new LatLng(22.9378, 57.30763))
+//                            .radius(1000)
+//                            .zIndex(12);// In meters
 
                     // Get back the mutable Circle
-                    Circle circle = map.addCircle(circleOptions);
+//                    Circle circle = map.addCircle(circleOptions);
 
                 }
 
