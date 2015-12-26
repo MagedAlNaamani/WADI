@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 /**
@@ -26,9 +27,12 @@ public class WadiApplication extends Application
         // Add your initialization code here
         Parse.initialize(this, "oI8Za40YuSeUPItHeUozG2zwsxW6qHv90CCOZbMM", "ChBccl3eOJo79ROCMmiKtNRBYcvqZDKh92CDYGnl");
 
-
-
+         /**
+          * NEEDED TO REIGSTER THE DEVICE IN PARSE INSTALLTIONS FOR PUSH NOTIFICATOIN
+          * */
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseUser.enableAutomaticUser();
+
 //    ParseACL defaultACL = new ParseACL();
 //    // Optionally enable public read access.
         // defaultACL.setPublicReadAccess(true);

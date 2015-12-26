@@ -3,7 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-
+    defaultConfig {
+        multiDexEnabled true
+    }
     defaultConfig {
         applicationId "com.wadi.wadisignals"
         minSdkVersion 14
@@ -17,6 +19,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
@@ -29,4 +35,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.google.android.gms:play-services:7.3.0'
+
+
 }
