@@ -1,12 +1,20 @@
 package com.wadi.wadisignals;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AddPlaceRequest;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -30,29 +38,31 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by magedalnaamani on 11/23/15.
  */
-public class DirectionMap extends FragmentActivity
-{
+public class DirectionMap extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
+    GoogleApiClient mGoogleApiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_map);
 
-
-        // Creates an Intent that will show Oman Map as first show
-//        Uri gmmIntentUri = Uri.parse("geo:21.524933, 56.231296?z=5.9");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, 0, this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
 
         // Initializing
@@ -194,6 +204,21 @@ public class DirectionMap extends FragmentActivity
         return data;
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
     // Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, Void, String>
     {
@@ -293,8 +318,11 @@ public class DirectionMap extends FragmentActivity
                                         for (ParseObject object : List)
                                         {
                                             ParseGeoPoint parseGeoPoint = object.getParseGeoPoint("Location");
+
                                             if (parseGeoPoint != null)
                                             {
+                                                //query.whereWithinKilometers("Location",parseGeoPoint,1.0);
+                                                //query.whereNear("Location",parseGeoPoint);
                                                 Log.d("object", "parseGeoPoint not null");
                                                 if (parseGeoPoint.getLatitude() == lat || parseGeoPoint.getLongitude() == lng)
                                                 {
@@ -304,10 +332,14 @@ public class DirectionMap extends FragmentActivity
                                                             .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
                                                             .title("This Wadi is Active")
                                                             .position(new LatLng(parseGeoPoint.getLatitude(), parseGeoPoint.getLongitude())));
+
                                                 }
+                                                addPlaceToGoogleDbAndToTrip("wadiName","95675967",parseGeoPoint.getLatitude(),parseGeoPoint.getLongitude());
                                             }
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         Log.d("score", "Error: " + e.getMessage());
                                     }
                                 }
@@ -322,7 +354,7 @@ public class DirectionMap extends FragmentActivity
 
                         // Adding all the points in the route to LineOptions
                         lineOptions.addAll(points);
-                        lineOptions.width(3);
+                        lineOptions.width(7);
                         lineOptions.color(Color.RED);
                     }
 
@@ -349,4 +381,47 @@ public class DirectionMap extends FragmentActivity
 
             }
         }}
+
+    private void addPlaceToGoogleDbAndToTrip(String placeName,String phoneNumber,Double lat,Double lng)
+    {
+        //final Double lat = getIntent().getExtras().getDouble("lat");
+        //final Double lng = getIntent().getExtras().getDouble("lng");
+        //final String placeName = newPlaceNameET.getText().toString();
+        //final String address = newPlaceAddressET.getText().toString();
+        //final String website = newPlaceWebsiteET.getText().toString();
+        //final String phoneNumber = newPlacePhoneET.getText().toString();
+        LatLng latlng = new LatLng(lat, lng);
+
+        AddPlaceRequest place =
+                new AddPlaceRequest
+                        (
+                                placeName, // Name
+                                latlng, // Latitude and longitude
+                                //address, // Address
+                                phoneNumber, // Phone Number
+                                Collections.singletonList(Place.TYPE_POINT_OF_INTEREST), // Place Type
+                                Uri.parse("www.SomeWebsite.co.il") // Website
+                        );
+
+        Places.GeoDataApi.addPlace(mGoogleApiClient, place).setResultCallback(new ResultCallback<PlaceBuffer>()
+        {
+            @Override
+            public void onResult(PlaceBuffer places)
+            {
+
+                if (!places.getStatus().isSuccess()) {
+
+                    Log.e("eeeee", "Place query did not complete. Error: " + places.getStatus().toString());
+                    places.release();
+                    return;
+                }
+
+                final Place place = places.get(0);
+                String newPlaceID = place.getId();
+                Log.i("iiiii", "Place add result: " + place.getName());
+                places.release();
+
+            }
+        });
+    }
 }
