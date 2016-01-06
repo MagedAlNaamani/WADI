@@ -17,7 +17,7 @@
     <permission android:protectionLevel="signature"
         android:name="com.wadi.wadisignals.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.wadi.wadisignals.permission.C2D_MESSAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
 
     <application

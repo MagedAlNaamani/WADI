@@ -1,5 +1,7 @@
 package com.wadi.wadisignals;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,12 +11,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.AddPlaceRequest;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -47,14 +52,17 @@ import java.util.List;
  */
 public class DirectionMap extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
+    int REQUEST_PLACE_PICKER;
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
     GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_map);
+
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -89,6 +97,8 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
 
             map.getUiSettings().setMyLocationButtonEnabled(false);
            // map.getUiSettings().setZoomGesturesEnabled(false);
+
+            map.getUiSettings().setZoomControlsEnabled(true);
 
             // Setting onclick event listener for the map
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener()
@@ -334,7 +344,7 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
                                                             .position(new LatLng(parseGeoPoint.getLatitude(), parseGeoPoint.getLongitude())));
 
                                                 }
-                                                addPlaceToGoogleDbAndToTrip("wadiName","95675967",parseGeoPoint.getLatitude(),parseGeoPoint.getLongitude());
+                                                addPlaceToGoogleDbAndToTrip((String) object.get("wadiName"),"95675967",parseGeoPoint.getLatitude(),parseGeoPoint.getLongitude());
                                             }
                                         }
                                     }
@@ -361,8 +371,7 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
                     // Drawing polyline in the Google Map for the i-th route
                     map.addPolyline(lineOptions);
 
-
-
+                    onPickButtonClick();
                     // Instantiates a new CircleOptions object and defines the center and radius
 //                    CircleOptions circleOptions = new CircleOptions()
 //                            .center(new LatLng(22.9378, 57.30763))
@@ -424,4 +433,51 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
             }
         });
     }
+
+    public void onPickButtonClick() {
+
+        // Construct an intent for the place picker
+        try {
+            REQUEST_PLACE_PICKER = 1;
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(this);
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            startActivityForResult(intent, REQUEST_PLACE_PICKER);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            // ...
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // ...
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_PLACE_PICKER
+                && resultCode == Activity.RESULT_OK) {
+
+            // The user has selected a place. Extract the name and address.
+            final Place place = PlacePicker.getPlace(data, this);
+
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = PlacePicker.getAttributions(data);
+            if (attributions == null) {
+                attributions = "";
+            }
+
+
+            //mViewName.setText(name);
+            //mViewAddress.setText(address);
+            //mViewAttributions.setText(Html.fromHtml(attributions));
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 }
