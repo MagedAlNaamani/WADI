@@ -1,5 +1,4 @@
 package com.wadi.wadisignals;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,9 +21,9 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -47,10 +46,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by magedalnaamani on 11/23/15.
- */
-public class DirectionMap extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     int REQUEST_PLACE_PICKER;
     GoogleMap map;
@@ -58,11 +54,9 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
     GoogleApiClient mGoogleApiClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_map);
-
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -72,39 +66,30 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
                 .addOnConnectionFailedListener(this)
                 .build();
 
-
         // Initializing
         markerPoints = new ArrayList<LatLng>();
 
-        // Getting reference to SupportMapFragment of the activity_main
-        SupportMapFragment fm = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        map = mapFragment.getMap();
+        onMapReady(map);
+    }
 
-        // Getting Map for the SupportMapFragment
-        map = fm.getMap();
+    @Override
+    public void onMapReady(final GoogleMap map) {
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng oman = new LatLng(21.524933, 55.90000);
+        map.addMarker(new MarkerOptions().position(oman).title("Marker in Oman"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(oman));
 
         if(map!=null){
-
-            // Enable MyLocation Button in the Map
-            map.setMyLocationEnabled(true);
-
-            //move camera to Oman Map
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(21.524933, 55.90000)).zoom(5).build();
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            //set trafic to true
-            map.setTrafficEnabled(true);
-
-            map.getUiSettings().setMyLocationButtonEnabled(false);
-           // map.getUiSettings().setZoomGesturesEnabled(false);
-
-            map.getUiSettings().setZoomControlsEnabled(true);
 
             // Setting onclick event listener for the map
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener()
             {
                 @Override
-                public void onMapClick(LatLng point)
-                {
+                public void onMapClick(LatLng point) {
                     // Already two locations
                     if (markerPoints.size() > 1) {
                         markerPoints.clear();
@@ -173,7 +158,39 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
 
         return url;
     }
-    /** A method to download json data from url */
+
+    private class DownloadTask extends AsyncTask<String, Void, String>
+    {
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try{
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            }catch(Exception e){
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
+    }
+
     private String downloadUrl(String strUrl) throws IOException
     {
         String data = "";
@@ -213,55 +230,6 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
         return data;
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    // Fetches data from url passed
-    private class DownloadTask extends AsyncTask<String, Void, String>
-    {
-
-        // Downloading data in non-ui thread
-        @Override
-        protected String doInBackground(String... url) {
-
-            // For storing data from web service
-            String data = "";
-
-            try{
-                // Fetching the data from web service
-                data = downloadUrl(url[0]);
-            }catch(Exception e){
-                Log.d("Background Task",e.toString());
-            }
-            return data;
-        }
-
-        // Executes in UI thread, after the execution of
-        // doInBackground()
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            ParserTask parserTask = new ParserTask();
-
-            // Invokes the thread for parsing the JSON data
-            parserTask.execute(result);
-        }
-    }
-
-    /** A class to parse the Google Places in JSON format */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >
     {
 
@@ -385,7 +353,7 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
             }catch (Exception ex)
             {
                 // handling what ever the error wAS
-                Toast.makeText(DirectionMap.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }}
@@ -411,11 +379,9 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
                                 Uri.parse("www.SomeWebsite.co.il") // Website
                         );
 
-        Places.GeoDataApi.addPlace(mGoogleApiClient, place).setResultCallback(new ResultCallback<PlaceBuffer>()
-        {
+        Places.GeoDataApi.addPlace(mGoogleApiClient, place).setResultCallback(new ResultCallback<PlaceBuffer>() {
             @Override
-            public void onResult(PlaceBuffer places)
-            {
+            public void onResult(PlaceBuffer places) {
 
                 if (!places.getStatus().isSuccess()) {
 
@@ -479,6 +445,19 @@ public class DirectionMap extends FragmentActivity implements GoogleApiClient.On
         }
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
 
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
 
 }
