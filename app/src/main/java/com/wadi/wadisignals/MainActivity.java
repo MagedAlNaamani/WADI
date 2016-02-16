@@ -34,14 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //fullName = (TextView) findViewById(R.id.tvFullName);
-        //email = (TextView) findViewById(R.id.tvEmail);
 
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        if(currentUser != null) {
-//            fullName.setText(currentUser.getString("FullName"));
-//            email.setText(currentUser.getEmail());
-//        }
         fragmentManager = getSupportFragmentManager();
         setupNavigationView();
         setupToolbar();
@@ -116,13 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
 
         }
-// else if(selectedID==R.id.RecentJob) {
-//            fragmentClass = Work.class;
-//            drawerLayout.closeDrawer(GravityCompat.START);
-//        } else if (selectedID==R.id.about){
-//            fragmentClass = About.class;
-//            drawerLayout.closeDrawer(GravityCompat.START);
-//        }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
