@@ -19,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="49dp"
-            android:id="@+id/linearLayout">
+            android:id="@+id/btnwadies">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="Wadies"
                 android:id="@+id/textView2"
                 android:layout_margin="5dp" />
 
@@ -41,8 +41,9 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true">
+            android:layout_below="@+id/btnwadies"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/btndestination">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -54,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="Destination"
                 android:id="@+id/textView3"
                 android:layout_margin="5dp" />
         </LinearLayout>
@@ -63,8 +64,9 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true">
+            android:layout_below="@+id/btnwadies"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/btnweather">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -76,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="Weather"
                 android:id="@+id/textView4"
                 android:layout_margin="5dp" />
         </LinearLayout>
@@ -85,8 +87,9 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true">
+            android:layout_below="@+id/btnwadies"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/btndiscover">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -98,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="Discover Oman Wadies"
                 android:id="@+id/textView5"
                 android:layout_margin="5dp" />
         </LinearLayout>

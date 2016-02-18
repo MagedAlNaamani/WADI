@@ -8,4 +8,38 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="title_activity_governorates">Governorates</string>
+
+    <!--
+         Ad Dakhiliyah
+     Ad Dhahirah
+     Al Batinah North
+     Al Batinah South
+     Al Buraimi
+     Al Wusta
+     Ash Sharqiyah North
+     Ash Sharqiyah South
+     Dhofar
+     Muscat
+     Musandam-->
+    <!-- Govenets -->
+    <string name="addakhiliyah">Ad Dakhiliyah </string>
+    <string name="addhahirah">Ad Dhahirah</string>
+    <string name="albatinahnorth">Al Batinah North</string>
+
+
+    <string name="albatinahsouth">Al Batinah South</string>
+    <string name="alburaimi">Al Buraimi</string>
+    <string name="alwusta">Al Wusta</string>
+
+    <string name="ashsharqiyahnorth">Ash Sharqiyah North</string>
+    <string name="ashsharqiyahsouth">Ash Sharqiyah South</string>
+    <string name="dhofar">Dhofar</string>
+    <string name="muscat">Muscat</string>
+    <string name="musandam">Musandam</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

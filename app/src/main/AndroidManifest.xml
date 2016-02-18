@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
 
+
     <application
         android:name="com.wadi.wadisignals.WadiApplication"
         android:allowBackup="true"
@@ -63,17 +64,18 @@
         <activity
             android:name=".DirectionMap"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" >
-        </activity>
-        <!--MapsActivity-->
+            android:theme="@style/AppTheme"></activity>
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" >
+            android:name=".Governorates"
+            android:label="@string/title_activity_governorates"
+            android:theme="@style/AppTheme">
+
         </activity>
         <!-- Parse push reciver -->
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -81,19 +83,22 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.wadi.wadisignals" />
             </intent-filter>
         </receiver>
-        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_logo"/>
+
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/ic_logo" />
+
 
     </application>
 

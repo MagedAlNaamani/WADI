@@ -1,6 +1,8 @@
 package com.wadi.wadisignals;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,12 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -36,17 +40,33 @@ public class Main extends Fragment implements View.OnClickListener {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        final ImageView imageView2 = (ImageView) rootView.findViewById(R.id.imageView2);
+
+        rootView.findViewById(R.id.btnwadies).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), Governorates.class);
+                intent.putExtra("fromwhere","wadies");
+                startActivity(intent);
+
+
+
+            }
+        });
+        rootView.findViewById(R.id.btndestination).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),DirectionMap.class));
+            }
+        });
+
+
+
         BuildRecyclerView();
 
-        imageView2.setOnClickListener(this);
 
         return rootView;
     }
     public void BuildRecyclerView() {
-
-
-
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Wadi");
         query.whereNotEqualTo("wadiStatus", 0);
         query.orderByDescending("updatedAt");
@@ -69,33 +89,8 @@ public class Main extends Fragment implements View.OnClickListener {
         Class fragmentClass = null;
         Bundle bundle = new Bundle();
 
-
         switch (v.getId()) {
 
-            case R.id.imageView2:
-                // do your code
-                fragmentClass = DiscoverWadies.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (java.lang.InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                break;
-
-            case R.id.imageView3:
-                fragmentClass = DiscoverDetails.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (java.lang.InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                break;
         }
     }
 }
