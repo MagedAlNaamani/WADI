@@ -1,13 +1,17 @@
 package com.wadi.wadisignals;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,6 +30,8 @@ public class DiscoverWadies extends Fragment {
     private RecyclerView recyclerView;
     private RecycleViewAdapter recycleViewAdapter;
     private RVDiscoverWadi recyclerViewDiscover;
+    Fragment fragment = null;
+    Class fragmentClass = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,28 +44,29 @@ public class DiscoverWadies extends Fragment {
         recyclerView.setLayoutManager(llm);
         BuildRecyclerView();
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "Item Clicked = " + position, Toast.LENGTH_LONG).show();
+                        // TODO Handle item click
+                        fragmentClass = DiscoverDetails.class;
+                        try {
+                            fragment = (Fragment) fragmentClass.newInstance();
+                        } catch (java.lang.InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                    }
+                })
+        );
+
         return rootView;
     }
 
     public void BuildRecyclerView() {
-//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Wadi");
-//        query.whereNotEqualTo("wadiStatus", 0);
-//        query.orderByDescending("updatedAt");
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> list, ParseException e) {
-//                int x = 0;
-//                if (e == null) {
-//                    recyclerViewDiscover = new RVDiscoverWadi(list, getActivity());
-//                    //recycleViewAdapter = new RecycleViewAdapter(list, getActivity());
-//                    recyclerView.setAdapter(recyclerViewDiscover);
-//
-//                } else {
-//
-//                }
-//            }
-//        });
-
 
         ParseQuery<ParseObject> regions = new ParseQuery<ParseObject>("regions");
         regions.whereEqualTo("region_name", "Muscat");
@@ -80,51 +87,53 @@ public class DiscoverWadies extends Fragment {
                                     recyclerViewDiscover = new RVDiscoverWadi(list, getActivity());
                                     recyclerView.setAdapter(recyclerViewDiscover);
                                 } else {
-
                                 }
                             }
-
                         });
-//                        wadies.getFirstInBackground(new GetCallback() {
-//                            @Override
-//                            public void done(ParseObject parseObject, ParseException e) {
-////                                recycleViewAdapter = new RecycleViewAdapter((List<ParseObject>) parseObject, getActivity());
-////                                recyclerView.setAdapter(recycleViewAdapter);
-//                                recyclerViewDiscover = new RVDiscoverWadi((List) parseObject, getActivity());
-//                                //recycleViewAdapter = new RecycleViewAdapter(list, getActivity());
-//                                recyclerView.setAdapter(recyclerViewDiscover);
-//                            }
-//
-//                            @Override
-//                            public void done(Object o, Throwable throwable) {
-//                            }
-//                        });
                     }
-
-//                        wadies.getFirstInBackground(new GetCallback() {
-//                            @Override
-//                            public void done(ParseObject parseObject, ParseException e) {
-//                                if(e==null) {
-//                                    recyclerViewDiscover = new RVDiscoverWadi(parseObject, getActivity());
-//                                    recyclerView.setAdapter(recyclerViewDiscover);
-//                                }
-//                                else {
-//
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void done(Object o, Throwable throwable) {
-//
-//                            }
-//                        });
-
-
-
                 } else {
-
                 }
             }
         });
+    }
+
+
+
+    public static class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+        private OnItemClickListener mListener;
+
+        public interface OnItemClickListener {
+            public void onItemClick(View view, int position);
+        }
+
+        GestureDetector mGestureDetector;
+
+        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
+            mListener = listener;
+            mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
+            View childView = view.findChildViewUnder(e.getX(), e.getY());
+            if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
+                mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
     }
 }

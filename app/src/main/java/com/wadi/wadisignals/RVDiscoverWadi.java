@@ -15,9 +15,7 @@ import java.util.List;
 /**
  * Created by magedalnaamani on 2/9/16.
  */
-public class RVDiscoverWadi extends RecyclerView.Adapter<RVDiscoverWadi.Holder>
-
-{
+public class RVDiscoverWadi extends RecyclerView.Adapter<RVDiscoverWadi.Holder> {
 
     List<ParseObject> data;
     Context context;

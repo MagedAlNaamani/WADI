@@ -84,6 +84,18 @@ public class Main extends Fragment implements View.OnClickListener {
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 break;
+
+            case R.id.imageView3:
+                fragmentClass = DiscoverDetails.class;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                break;
         }
     }
 }
