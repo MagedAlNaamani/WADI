@@ -1,99 +1,82 @@
 package com.wadi.wadisignals;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseObject;
+public class Governorates extends Fragment {
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-public class Governorates extends AppCompatActivity {
-
+    private FragmentManager fragmentManager;
     private RecyclerView recyclerView;
-    /**
-     *
-     Ad Dakhiliyah
-     Ad Dhahirah
-     Al Batinah North
-     Al Batinah South
-     Al Buraimi
-     Al Wusta
-     Ash Sharqiyah North
-     Ash Sharqiyah South
-     Dhofar
-     Muscat
-     Musandam
-     * */
-   public static FragmentTransaction fragmentTransaction;
-    public static FragmentManager fragmentManager;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.governets_container);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private RVDiscoverWadi recyclerViewDiscover;
+    Fragment fragment = null;
+    Class fragmentClass = null;
 
-        Intent extras=getIntent();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_governorates, container, false);
 
-         fragmentManager = getFragmentManager();
-        GovernetsFragments governetsFragments = new GovernetsFragments();
-        Bundle bundle=new Bundle();
-        bundle.putString("fromwhere",extras.getStringExtra("fromwhere"));
-        governetsFragments.setArguments(bundle);
-
-        // get the Fragment Transction
-        //
-         fragmentTransaction = fragmentManager.beginTransaction();
-        // add the transction
+        fragmentManager = getActivity().getSupportFragmentManager();
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.governorates);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+        BuildRecyclerView();
 
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "Item Clicked = " + position, Toast.LENGTH_LONG).show();
+                        // TODO Handle item click
+                        fragmentClass = DiscoverWadies.class;
+                        try {
+                            fragment = (Fragment) fragmentClass.newInstance();
+                        } catch (java.lang.InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                    }
+                })
+        );
 
-        fragmentTransaction.replace(R.id.mainfragmentscontainer, governetsFragments, "mainFragment");
-        // comit
-        fragmentTransaction.commit();
 
+        return rootView;
+    }
+
+
+    public void BuildRecyclerView() {
+
+        String[] name={
+                getResources().getString(R.string.addakhiliyah),
+                getResources().getString(R.string.addhahirah),
+                getResources().getString(R.string.albatinahnorth),
+                getResources().getString(R.string.albatinahsouth),
+                getResources().getString(R.string.alburaimi),
+                getResources().getString(R.string.alwusta),
+                getResources().getString(R.string.ashsharqiyahnorth),
+                getResources().getString(R.string.ashsharqiyahsouth),
+                getResources().getString(R.string.dhofar),
+                getResources().getString(R.string.muscat),
+                getResources().getString(R.string.musandam),
+        };
+
+        RVGovernorates governetAdapter=new RVGovernorates(name);
+        recyclerView.setAdapter(governetAdapter);
 
     }
 
     public static void discoverWadies(String governet){
 
-        DiscoverWadiFragment governetsFragments = new DiscoverWadiFragment();
-        Bundle bundle=new Bundle();
-        bundle.putString("governet",governet);
-        governetsFragments.setArguments(bundle);
-
-        // get the Fragment Transction
-        //
-        fragmentTransaction = fragmentManager.beginTransaction();
-        // add the transction
-
-
-
-        fragmentTransaction.replace(R.id.mainfragmentscontainer, governetsFragments, "mainFragment");
-        // comit
-        fragmentTransaction.commit();
     }
-
-
 }
 
 

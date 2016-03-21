@@ -25,7 +25,7 @@ public class ActiveWadies extends Fragment
 
     RecyclerView recyclerView;
     Chronometer chronometer;
-    RecycleViewAdapter recycleViewAdapter;
+    RVWadies recycleViewAdapter;
     int x=0;
 
     @Override
@@ -67,7 +67,7 @@ public class ActiveWadies extends Fragment
             public void done(List<ParseObject> list, ParseException e) {
                 int x=0;
                 if (e == null) {
-                    recycleViewAdapter = new RecycleViewAdapter(list, getActivity().getApplicationContext());
+                    recycleViewAdapter = new RVWadies(list, getActivity().getApplicationContext());
                     recyclerView.setAdapter(recycleViewAdapter);
 
                 } else {

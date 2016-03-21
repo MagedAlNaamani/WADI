@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
             super.onBackPressed();
     }
+
     private void setupNavigationView() {
         //set drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -28,10 +28,10 @@ public class DiscoverWadies extends Fragment {
 
     private FragmentManager fragmentManager;
     private RecyclerView recyclerView;
-    private RecycleViewAdapter recycleViewAdapter;
     private RVDiscoverWadi recyclerViewDiscover;
     Fragment fragment = null;
     Class fragmentClass = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public class DiscoverWadies extends Fragment {
     }
 
     public void BuildRecyclerView() {
-
         ParseQuery<ParseObject> regions = new ParseQuery<ParseObject>("regions");
         regions.whereEqualTo("region_name", "Muscat");
         regions.findInBackground(new FindCallback<ParseObject>() {
@@ -87,11 +86,14 @@ public class DiscoverWadies extends Fragment {
                                     recyclerViewDiscover = new RVDiscoverWadi(list, getActivity());
                                     recyclerView.setAdapter(recyclerViewDiscover);
                                 } else {
+
                                 }
                             }
+
                         });
                     }
                 } else {
+
                 }
             }
         });
@@ -99,41 +101,6 @@ public class DiscoverWadies extends Fragment {
 
 
 
-    public static class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-        private OnItemClickListener mListener;
 
-        public interface OnItemClickListener {
-            public void onItemClick(View view, int position);
-        }
 
-        GestureDetector mGestureDetector;
-
-        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
-            mListener = listener;
-            mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
-            View childView = view.findChildViewUnder(e.getX(), e.getY());
-            if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-                mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
 }

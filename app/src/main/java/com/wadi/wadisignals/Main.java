@@ -2,7 +2,6 @@ package com.wadi.wadisignals;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -28,7 +24,7 @@ public class Main extends Fragment implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
     private RecyclerView recyclerView;
-    private RecycleViewAdapter recycleViewAdapter;
+    private RVWadies recycleViewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,22 +40,75 @@ public class Main extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.btnwadies).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), Governorates.class);
-                intent.putExtra("fromwhere","wadies");
-                startActivity(intent);
+                Fragment fragment = null;
+                Class fragmentClass = null;
+                Bundle bundle = new Bundle();
+                fragmentClass = Governorates.class;
+                //bundle.putString("Wadi_ID", "1");
 
-
-
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    //fragment.setArguments(bundle);
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
         rootView.findViewById(R.id.btndestination).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),DirectionMap.class));
+                startActivity(new Intent(getActivity(), DirectionMap.class));
             }
         });
 
+        rootView.findViewById(R.id.btndiscover).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = null;
+                Class fragmentClass = null;
+                Bundle bundle = new Bundle();
+                fragmentClass = Governorates.class;
+                //bundle.putString("Wadi_ID", "1");
 
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    //fragment.setArguments(bundle);
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            }
+        });
+
+//        rootView.findViewById(R.id.btndiscover).setOnClickListener(new View.OnClickListener(){
+//            Fragment fragment = null;
+//            Class fragmentClass = null;
+//            Bundle bundle = new Bundle();
+//
+//            @Override
+//            public void onClick(View view) {
+//                fragmentClass = DiscoverWadies.class;
+//                //bundle.putString("Wadi_ID", "1");
+//
+//                try {
+//                    fragment = (Fragment) fragmentClass.newInstance();
+//                    //fragment.setArguments(bundle);
+//                } catch (java.lang.InstantiationException e) {
+//                    e.printStackTrace();
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//            }
+//
+//
+//
+//        });
 
         BuildRecyclerView();
 
@@ -75,7 +124,7 @@ public class Main extends Fragment implements View.OnClickListener {
             public void done(List<ParseObject> list, ParseException e) {
                 int x = 0;
                 if (e == null) {
-                    recycleViewAdapter = new RecycleViewAdapter(list, getActivity());
+                    recycleViewAdapter = new RVWadies(list, getActivity());
                     recyclerView.setAdapter(recycleViewAdapter);
 
                 } else {
@@ -91,6 +140,21 @@ public class Main extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
 
+            case R.id.imageView5:
+                fragmentClass = DiscoverWadies.class;
+                //bundle.putString("Wadi_ID", "1");
+
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    //fragment.setArguments(bundle);
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+                break;
         }
     }
 }

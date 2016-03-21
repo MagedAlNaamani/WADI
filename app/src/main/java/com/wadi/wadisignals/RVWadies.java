@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by magedalnaamani on 11/18/15.
  */
-public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.Holder>
+public class RVWadies extends RecyclerView.Adapter<RVWadies.Holder>
 
 {
 
@@ -25,7 +25,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     /**TO FORMAT THE DATE*/
     SimpleDateFormat dateFormat;
 
-    public RecycleViewAdapter(List<ParseObject> data, Context context) {
+    public RVWadies(List<ParseObject> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -33,7 +33,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_layout,viewGroup,false);
+        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_wadi,viewGroup,false);
         dateFormat=new SimpleDateFormat("yyyy.MM.dd");
         return new Holder(rootView);
     }

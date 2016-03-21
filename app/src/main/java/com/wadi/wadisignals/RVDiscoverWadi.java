@@ -15,7 +15,9 @@ import java.util.List;
 /**
  * Created by magedalnaamani on 2/9/16.
  */
-public class RVDiscoverWadi extends RecyclerView.Adapter<RVDiscoverWadi.Holder> {
+public class RVDiscoverWadi extends RecyclerView.Adapter<RVDiscoverWadi.Holder>
+
+{
 
     List<ParseObject> data;
     Context context;
@@ -31,7 +33,7 @@ public class RVDiscoverWadi extends RecyclerView.Adapter<RVDiscoverWadi.Holder> 
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.discover_wadi_card,viewGroup,false);
+        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_discover_wadi,viewGroup,false);
         //dateFormat=new SimpleDateFormat("yyyy.MM.dd");
         return new Holder(rootView);
     }
