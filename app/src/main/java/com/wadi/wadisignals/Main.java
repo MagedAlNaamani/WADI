@@ -60,7 +60,7 @@ public class Main extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.btndestination).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), DirectionMap.class));
+                startActivity(new Intent(getActivity(), MapsActivity.class));
             }
         });
 
