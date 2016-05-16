@@ -29,9 +29,7 @@ public class DiscoverDetails extends Fragment {
 
         tvDiscoverDetails = (TextView) rootView.findViewById(R.id.tvDiscoverDetails);
         imageView = (ImageView) rootView.findViewById(R.id.imgDiscoverDetails);
-
         vFillDetails();
-
         return rootView;
     }
 
